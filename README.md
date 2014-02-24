@@ -2,9 +2,9 @@
 
 [![Build Status](https://secure.travis-ci.org/robolectric/deckard.png?branch=master)](http://travis-ci.org/robolectric/deckard)
 
-Deckard is the simplest possible Android project that uses Robolectric for testing and Maven to build. It has one Activity (with an empty layout), and a Robolectric test that creates that Activity. 
+Deckard is the simplest possible Android project that uses Robolectric for testing and Gradle to build. It has one Activity (with an empty layout), and a Robolectric test that creates that Activity. 
 
-Deckard also imports seamlessly into IntelliJ, due to IntelliJ's support for Maven. Just import the pom.xml.
+Deckard also imports seamlessly into IntelliJ, due to IntelliJ's support for gradle. Just import the build.gradle.
 
 ## Setup
 
@@ -45,10 +45,10 @@ To start a new Android project:
 7. In the project directory you should be able to run the tests:
     ```bash
     cd my-new-project
-    mvn clean test
+    ./gradlew clean test
     ```
         
-8. Optionally, import the project into IntelliJ (or Eclipse) by selecting 'Import Project' in IntelliJ and selecting the project's `pom.xml`. When prompted to pick an SDK you just need to select the Android SDK home and your JDK.
+8. Optionally, import the project into IntelliJ (or Eclipse) by selecting 'Import Project' in IntelliJ and selecting the project's `build.gradle`. When prompted to pick an SDK you just need to select the Android SDK home and your JDK.
 
 9. Change the names of things from 'Deckard' to whatever is appropriate for your project. Package name, classes, and the AndroidManifest are good places to start.
 
