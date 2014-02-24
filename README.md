@@ -36,9 +36,28 @@ To start a new Android project:
     cd my-new-project
     ./gradlew clean test
     ```
-        
-6. Optionally, import the project into IntelliJ (or Eclipse) by selecting 'Import Project' in IntelliJ and selecting the project's `build.gradle`. When prompted to pick an SDK you just need to select the Android SDK home and your JDK.
 
-7. Change the names of things from 'Deckard' to whatever is appropriate for your project. Package name, classes, and the AndroidManifest are good places to start.
+6. Change the names of things from 'Deckard' to whatever is appropriate for your project. Package name, classes, and the AndroidManifest are good places to start.
 
-8. Build an app. Win.
+7. Build an app. Win.
+
+## Optional
+1. Import the project into IntelliJ, Android Studio, or Eclipse by selecting 'Import Project' and selecting the project's `build.gradle`. When prompted, you can just pick the default gradle wrapper.
+
+2. You may also need to change the classpath order for you dependencies:
+    - For Intellij, go to Project Structure -> Modules -> RobolectricGradleExample pane. In the Dependencies tab, move the Module SDK dependency (i.e. Android API 19 Platform) to be the last item in the list.
+    - For Android Studio, dependency ordering is currently not modifiable via any GUI. Therefore, you must modify the project iml file directly as such and reload the project:
+
+```html
+	    	<orderEntry type="library" exported="" scope="TEST" name="wagon-provider-api-1.0-beta-6" level="project" />
+	    	<orderEntry type="library" exported="" scope="TEST" name="xercesMinimal-1.9.6.2" level="project" />
+	    	<orderEntry type="jdk" jdkName="Android API 19 Platform" jdkType="Android SDK" />					<---make sure this is the last orderEntry
+		</component>
+	</module>
+```
+
+
+
+
+
+
