@@ -4,3 +4,7 @@
 target
 *.iml
 .idea
+app
+build
+.gradle
+local.properties
