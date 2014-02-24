@@ -23,33 +23,22 @@ To start a new Android project:
     ```bash
     android
     ```
-4. Install Maven if you haven't already (run `mvn` to check). On OS X (as before) this is easiest with [Homebrew](http://brew.sh/):
-	```bash
-	brew install maven
-	```
-	* If you are planning on using Android SDK >=4.4, you need maven >=3.1.1.  Instuctions for its installation are available [here](http://myjeeva.com/how-to-do-maven-upgrade-in-mac-os-x.html).
 
-5. Use [Maven Android SDK Deployer](https://github.com/mosabua/maven-android-sdk-deployer) to maven-ize the Android SDK:
-    ```bash
-    git clone https://github.com/mosabua/maven-android-sdk-deployer.git
-    (cd maven-android-sdk-deployer && mvn install -P 4.3)
-    ```
-
-6. Download Deckard from GitHub:
+4. Download Deckard from GitHub:
     ```bash
     wget https://github.com/robolectric/deckard/archive/master.zip
     unzip master.zip
     mv deckard-master my-new-project
     ```
 
-7. In the project directory you should be able to run the tests:
+5. In the project directory you should be able to run the tests:
     ```bash
     cd my-new-project
     ./gradlew clean test
     ```
         
-8. Optionally, import the project into IntelliJ (or Eclipse) by selecting 'Import Project' in IntelliJ and selecting the project's `build.gradle`. When prompted to pick an SDK you just need to select the Android SDK home and your JDK.
+6. Optionally, import the project into IntelliJ (or Eclipse) by selecting 'Import Project' in IntelliJ and selecting the project's `build.gradle`. When prompted to pick an SDK you just need to select the Android SDK home and your JDK.
 
-9. Change the names of things from 'Deckard' to whatever is appropriate for your project. Package name, classes, and the AndroidManifest are good places to start.
+7. Change the names of things from 'Deckard' to whatever is appropriate for your project. Package name, classes, and the AndroidManifest are good places to start.
 
-10. Build an app. Win.
+8. Build an app. Win.
