@@ -51,6 +51,11 @@ android {
     }
 }
 
+androidTest {
+    include '**/*Test.class'
+    exclude '**/espresso/**/*.class'
+}
+
 dependencies {
     repositories {
         mavenCentral()
