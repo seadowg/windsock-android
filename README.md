@@ -1,5 +1,4 @@
-# Deckard
-
+# Deckard (for Gradle)
 [![Build Status](https://secure.travis-ci.org/robolectric/deckard-gradle.png?branch=master)](http://travis-ci.org/robolectric/deckard-gradle)
 
 Deckard is the simplest possible Android project that uses Robolectric for testing and Gradle to build. It has one Activity (with an empty layout), and a Robolectric test that creates that Activity. 
@@ -26,7 +25,7 @@ To start a new Android project:
 
 4. Download Deckard from GitHub:
     ```bash
-    wget https://github.com/robolectric/deckard/archive/master.zip
+    wget https://github.com/robolectric/deckard-gradle/archive/master.zip
     unzip master.zip
     mv deckard-master my-new-project
     ```
