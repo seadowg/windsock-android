@@ -3,7 +3,7 @@
 
 Deckard is the simplest possible Android project that uses Robolectric for testing and Gradle to build. It has one Activity, a single Robolectric test of that Activity, and an Espresso test of that Activity.
 
-Deckard also imports seamlessly into IntelliJ and Android Studio, due to their support for gradle. See below for instructions.
+With just a bit of manual intervention, Deckard also imports into IntelliJ and Android Studio, due to their support for gradle. See below for instructions.
 
 ## Setup
 
@@ -36,35 +36,43 @@ To start a new Android project:
 
 ## IntelliJ / Android Studio Support
 
-1. Import the project into IntelliJ or Android Studio by selecting 'Import Project' and selecting the project's `build.gradle`. When prompted, you can just pick the default gradle wrapper.
+### Compatibility
+Currently we believe only IntelliJ EAP build 135.666 or later and Android Studio 0.5.0 or later will work with the tooling that deckard-gradle depends on.
 
-2. You will also need to change the classpath order for you dependencies. Otherwise you will see the dreaded `Stub!` exception:
-	```
-	!!! JUnit version 3.8 or later expected:
+### Importing
+Import the project into IntelliJ or Android Studio by selecting 'Import Project' and selecting the project's `build.gradle`. When prompted, you can just pick the default gradle wrapper.
 
-	java.lang.RuntimeException: Stub!
-	at junit.runner.BaseTestRunner.<init>(BaseTestRunner.java:5)
-	at junit.textui.TestRunner.<init>(TestRunner.java:54)
-	at junit.textui.TestRunner.<init>(TestRunner.java:48)
-	at junit.textui.TestRunner.<init>(TestRunner.java:41)
-	```
-    * For Intellij, go to Project Structure -> Modules -> deckard-gradle pane. In the Dependencies tab, move the Module SDK dependency (i.e. Android API 19 Platform) to be the last item in the list.
-    * For Android Studio, dependency ordering is currently not modifiable via any GUI. Therefore, you must modify the project iml file directly as such and reload the project:
-
-    ```html
+### REQUIRED: Tweaking the Module Dependency Order (i.e. Classpath)
+For both IntelliJ IDEA and Android Studio, you will also need to change the classpath order for you dependencies. Otherwise you will see the dreaded `Stub!` exception:
+```
+    !!! JUnit version 3.8 or later expected:
+    java.lang.RuntimeException: Stub!
+      at junit.runner.BaseTestRunner.<init>(BaseTestRunner.java:5)
+      at junit.textui.TestRunner.<init>(TestRunner.java:54)
+      at junit.textui.TestRunner.<init>(TestRunner.java:48)
+      at junit.textui.TestRunner.<init>(TestRunner.java:41)
+```
+* For Intellij, go to Project Structure -> Modules -> deckard-gradle pane. In the Dependencies tab, move the Module SDK dependency (i.e. Android API 19 Platform) to be the last item in the list.
+* For Android Studio, dependency ordering is currently not modifiable via any GUI. Therefore, you must modify the project iml file directly as such and reload the project:
+    
+```
     	    	<orderEntry type="library" exported="" scope="TEST" name="wagon-provider-api-1.0-beta-6" level="project" />
     	    	<orderEntry type="library" exported="" scope="TEST" name="xercesMinimal-1.9.6.2" level="project" />
     	    	<orderEntry type="jdk" jdkName="Android API 19 Platform" jdkType="Android SDK" />			    		<---make sure this is the last orderEntry
     		</component>
     	</module>
-    ```
+```
     
-    * NOTE: Android Studio aggressively re-writes your dependencies list (your .iml file) and subverts the technique used above to get the Android SDK to the bottom of the classpath. You will get the dreaded Stub! exception every time you re-open the project (and possibly more often).  For this reason we currently recommend IntelliJ; we hope we can be solved in the future.
-3. You should now be able to `DeckardActivityRobolectricTest`. Run it as a normal JUnit test - make sure to choose the JUnit test runner and not the Android one.
+NOTE: Android Studio aggressively re-writes your dependencies list (your .iml file) and subverts the technique used above to get the Android SDK to the bottom of the classpath. You will get the dreaded Stub! exception every time you re-open the project (and possibly more often).  For this reason we currently recommend IntelliJ; we hope this can be solved in the future.
+
+### IntelliJ Extra Step
+Gradle is now in charge of compilation, but IntelliJ still launches the test runner. So in order for IntelliJ to know where to find compiled classes, you have to tell it. This manual step will hopefully go away soon, but for now it's necessary:
+
+1. Go to Project Structure -> Modules -> deckard-gradle -> Paths.
+2. The value for 'Output path' should be filled in, but 'Test ouput path' will not be. Copy the text that's in 'Output path', paste into 'Test output path', but change the final 'build/classes' to 'build/test-classes'
+
+### Running the Robolectric Test
+You should now be able to `DeckardActivityRobolectricTest`. Run it as a normal JUnit test - make sure to choose the JUnit test runner and not the Android one.
  
-4. To run the Espresso test, you need to set up a Run Configuration. Go to `Edit Configurations -> Defaults -> Android Tests` and, after choosing  the correct module (deckard-gradle), fill in the `Specific instrumentation test runner` field. The easiest way is to click the elipsis button on the right and type in `GITR`. This will find `GoogleInstrumentationTestRunner`, which is what you want. The fully-qualified class name will appear. Now you can right click on the test method in `DeckardEspressoTest` and choose the Android test runner.
-
-
-
-
-
+### Running the Espresso Test
+To run the Espresso test, you need to set up a Run Configuration. Go to `Edit Configurations -> Defaults -> Android Tests` and, after choosing  the correct module (deckard-gradle), fill in the `Specific instrumentation test runner` field. The easiest way is to click the elipsis button on the right and type in `GITR`. This will find `GoogleInstrumentationTestRunner`, which is what you want. The fully-qualified class name will appear. Now you can right click on the test method in `DeckardEspressoTest` and choose the Android test runner.
