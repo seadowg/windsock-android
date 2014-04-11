@@ -71,6 +71,9 @@ Gradle is now in charge of compilation, but IntelliJ still launches the test run
 1. Go to Project Structure -> Modules -> deckard-gradle -> Paths.
 2. The value for 'Output path' should be filled in, but 'Test ouput path' will not be. Copy the text that's in 'Output path', paste into 'Test output path', but change the final 'build/classes/debug' to 'build/test-classes'. This is because the gradle android test plugin currently dumps all compiled test output (for all variants) into the same directory. This means that currently variants are not fully supported.
 
+### Android Studio Extra Setp
+The above trick doesn't work for Android Studio, since that part of the module configuration GUI has been ripped out of the IDE. According to [this thread on the Robolectric google group](https://groups.google.com/forum/#!topic/robolectric/xsOpEwtdTi4), some people have managed to get Android Studio to find the classes compiled by gradle.
+
 ### Running the Robolectric Test
 You should now be able to `DeckardActivityRobolectricTest`. Run it as a normal JUnit test - make sure to choose the JUnit test runner and not the Android one.
  
