@@ -69,7 +69,7 @@ NOTE: Android Studio aggressively re-writes your dependencies list (your .iml fi
 Gradle is now in charge of compilation, but IntelliJ still launches the test runner. So in order for IntelliJ to know where to find compiled classes, you have to tell it. This manual step will hopefully go away soon, but for now it's necessary:
 
 1. Go to Project Structure -> Modules -> deckard-gradle -> Paths.
-2. The value for 'Output path' should be filled in, but 'Test ouput path' will not be. Copy the text that's in 'Output path', paste into 'Test output path', but change the final 'build/classes/debug' to 'build/test-classes/debug'
+2. The value for 'Output path' should be filled in, but 'Test ouput path' will not be. Copy the text that's in 'Output path', paste into 'Test output path', but change the final 'build/classes/debug' to 'build/test-classes'. This is because the gradle android test plugin currently dumps all compiled test output (for all variants) into the same directory. This means that currently variants are not fully supported.
 
 ### Running the Robolectric Test
 You should now be able to `DeckardActivityRobolectricTest`. Run it as a normal JUnit test - make sure to choose the JUnit test runner and not the Android one.
