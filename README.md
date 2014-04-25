@@ -29,7 +29,7 @@ To start a new Android project:
     cd my-new-project
     ./gradlew clean test
     ```
-6. You should also be able to run the Espresso tests: `./gradlew clean connectedInstrumentTest`. Note: Make sure to start an Emulator or connect a device first so the test has something to connect to.
+6. You should also be able to run the Espresso tests: `./gradlew clean connectedAndroidTest`. Note: Make sure to start an Emulator or connect a device first so the test has something to connect to.
 7. Change the names of things from 'Deckard' to whatever is appropriate for your project. Package name, classes, and the AndroidManifest are good places to start.
 
 8. Build an app. Win.
