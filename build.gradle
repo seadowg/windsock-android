@@ -43,10 +43,6 @@ android {
     }
 
     sourceSets {
-    	main {
-            manifest.srcFile 'AndroidManifest.xml'
-            res.srcDirs = ['res']
-	    }
         androidTest {
             setRoot('src/test')
         }
