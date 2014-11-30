@@ -1,0 +1,8 @@
+---
+image: docker:///wasabeef/android
+
+inputs:
+- name: windsock-android
+
+run:
+  path: windsock-android/scripts/ci.sh

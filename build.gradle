@@ -6,6 +6,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:0.13.+'
         classpath 'org.robolectric:robolectric-gradle-plugin:0.13.+'
+        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.+'
     }
 }
 
@@ -15,6 +16,7 @@ allprojects {
     }
 }
 
+apply plugin: 'android-sdk-manager'
 apply plugin: 'android'
 apply plugin: 'robolectric'
 
@@ -57,17 +59,12 @@ dependencies {
     repositories {
         mavenCentral()
     }
-    // Espresso
-    androidTestCompile files('lib/espresso-1.1.jar', 'lib/testrunner-1.1.jar', 'lib/testrunner-runtime-1.1.jar')
-    androidTestCompile 'com.google.guava:guava:14.0.1'
-    androidTestCompile 'com.squareup.dagger:dagger:1.1.0'
-    androidTestCompile 'org.hamcrest:hamcrest-integration:1.1'
-    androidTestCompile 'org.hamcrest:hamcrest-core:1.1'
-    androidTestCompile 'org.hamcrest:hamcrest-library:1.1'
 
-    androidTestCompile('junit:junit:4.11') {
-        exclude module: 'hamcrest-core'
-    }
+    compile 'com.squareup.okhttp:okhttp:2.1.0'
+    compile group: 'com.android.support', name: 'support-v4', version: '20.0.0'
+
+    androidTestCompile('junit:junit:4.11')
+
     androidTestCompile('org.robolectric:robolectric:2.4') {
         exclude module: 'classworlds'
         exclude module: 'commons-logging'
@@ -85,7 +82,6 @@ dependencies {
         exclude module: 'wagon-http-lightweight'
         exclude module: 'wagon-provider-api'
     }
-    androidTestCompile 'com.squareup:fest-android:1.0.+'
 }
 
 apply plugin: 'idea'

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="pending">#D0D0D0</color>
+    <color name="started">#F4BF75</color>
+    <color name="succeeded">#90A959</color>
+    <color name="failed">#AC4142</color>
+    <color name="errored">#D28445</color>
+    <color name="aborted">#8F5536</color>
+</resources>
