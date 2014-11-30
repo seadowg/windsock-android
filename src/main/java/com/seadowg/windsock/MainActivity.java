@@ -27,15 +27,18 @@ public class MainActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.main);
 
-    new FetchJobsTask(this).execute();
+    ListView jobsList = (ListView) findViewById(R.id.jobs);
+    JobsAdapter adapter = new JobsAdapter();
+    jobsList.setAdapter(adapter);
+
+    new FetchJobsTask(adapter).execute();
   }
 
   private class FetchJobsTask extends AsyncTask<Void, Void, List<Job>> {
+    private final JobsAdapter adapter;
 
-    private final Activity activity;
-
-    public FetchJobsTask(Activity activity) {
-      this.activity = activity;
+    public FetchJobsTask(JobsAdapter adapter) {
+      this.adapter = adapter;
     }
 
     @Override
@@ -72,16 +75,15 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onPostExecute(List<Job> jobs) {
-      ListView jobsList = (ListView) activity.findViewById(R.id.jobs);
-      jobsList.setAdapter(new JobsAdapter(jobs));
+      adapter.setJobs(jobs);
     }
   }
 
   private class JobsAdapter extends BaseAdapter {
-    private final List<Job> jobs;
+    private List<Job> jobs;
 
-    public JobsAdapter(List<Job> jobs) {
-      this.jobs = jobs;
+    public JobsAdapter() {
+      this.jobs = new ArrayList<Job>();
     }
 
     @Override
@@ -121,6 +123,12 @@ public class MainActivity extends Activity {
       }
 
       return view;
+    }
+
+    public void setJobs(List<Job> jobs) {
+      this.jobs = jobs;
+
+      notifyDataSetChanged();
     }
   }
 }
