@@ -27,18 +27,25 @@ public class MainActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.main);
 
-    ListView jobsList = (ListView) findViewById(R.id.jobs);
-    JobsAdapter adapter = new JobsAdapter();
-    jobsList.setAdapter(adapter);
+    final JobsAdapter adapter = new JobsAdapter();
 
-    new FetchJobsTask(adapter).execute();
+    new FetchJobsTask(new FetchJobsTask.Callback() {
+      @Override
+      public void call(List<Job> jobs) {
+        adapter.setJobs(jobs);
+      }
+    }).execute();
+
+    ListView jobsList = (ListView) findViewById(R.id.jobs);
+    jobsList.setEmptyView(findViewById(R.id.no_jobs));
+    jobsList.setAdapter(adapter);
   }
 
-  private class FetchJobsTask extends AsyncTask<Void, Void, List<Job>> {
-    private final JobsAdapter adapter;
+  private static class FetchJobsTask extends AsyncTask<Void, Void, List<Job>> {
+    private final Callback callback;
 
-    public FetchJobsTask(JobsAdapter adapter) {
-      this.adapter = adapter;
+    public FetchJobsTask(Callback callback) {
+      this.callback = callback;
     }
 
     @Override
@@ -75,7 +82,11 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onPostExecute(List<Job> jobs) {
-      adapter.setJobs(jobs);
+      callback.call(jobs);
+    }
+
+    public interface Callback {
+      public void call(List<Job> jobs);
     }
   }
 
@@ -84,6 +95,11 @@ public class MainActivity extends Activity {
 
     public JobsAdapter() {
       this.jobs = new ArrayList<Job>();
+    }
+
+    public void setJobs(List<Job> jobs) {
+      this.jobs = jobs;
+      notifyDataSetChanged();
     }
 
     @Override
@@ -103,7 +119,7 @@ public class MainActivity extends Activity {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-      TextView view = (TextView) getLayoutInflater().inflate(android.R.layout.simple_list_item_1, parent, false);
+      TextView view = (TextView) (convertView != null ? convertView : inflateItem(parent));
       Job job = jobs.get(position);
 
       view.setText(job.getName());
@@ -125,10 +141,8 @@ public class MainActivity extends Activity {
       return view;
     }
 
-    public void setJobs(List<Job> jobs) {
-      this.jobs = jobs;
-
-      notifyDataSetChanged();
+    private View inflateItem(ViewGroup parent) {
+      return getLayoutInflater().inflate(android.R.layout.simple_list_item_1, parent, false);
     }
   }
 }

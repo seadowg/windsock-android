@@ -9,10 +9,8 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.shadows.ShadowView;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.robolectric.Robolectric.shadowOf;
 
 @Config(manifest = "./src/main/AndroidManifest.xml", emulateSdk = 18)
