@@ -2,7 +2,7 @@ package com.seadowg.windsock.test;
 
 import android.app.Activity;
 import android.widget.ListView;
-import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
 import com.seadowg.windsock.MainActivity;
 import com.seadowg.windsock.R;
 import com.seadowg.windsock.instance.UrlProvider;
@@ -16,6 +16,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import roboguice.RoboGuice;
+import roboguice.inject.RoboInjector;
 
 import java.io.IOException;
 
@@ -25,14 +26,16 @@ import static org.robolectric.Robolectric.shadowOf;
 @RunWith(RobolectricTestRunner.class)
 public class MainActivityTest {
 
+    @Inject
     private UrlProvider urlProvider;
+
     private Activity activity;
     private MockWebServer server;
 
     @Before
     public void setup() throws Exception {
-        urlProvider = new UrlProvider();
-        RoboGuice.overrideApplicationInjector(Robolectric.application, new TestModule(urlProvider));
+        RoboInjector injector = RoboGuice.getInjector(Robolectric.application);
+        injector.injectMembers(this);
     }
 
     @After
@@ -76,18 +79,5 @@ public class MainActivityTest {
     private void startActivity() {
         urlProvider.setUrl(server.getUrl("").toString());
         activity = Robolectric.setupActivity(MainActivity.class);
-    }
-
-    public static class TestModule extends AbstractModule {
-        private final UrlProvider urlProvider;
-
-        public TestModule(UrlProvider urlProvider) {
-            this.urlProvider = urlProvider;
-        }
-
-        @Override
-        protected void configure() {
-            bind(UrlProvider.class).toInstance(urlProvider);
-        }
     }
 }
