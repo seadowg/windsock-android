@@ -10,9 +10,12 @@ import android.widget.TextView;
 import com.google.inject.Inject;
 import com.seadowg.windsock.instance.UrlProvider;
 import com.seadowg.windsock.jobs.Job;
+import com.seadowg.windsock.jobs.JobsDataSource;
+import com.seadowg.windsock.jobs.JobsList;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import com.squareup.otto.Subscribe;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,17 +30,23 @@ public class MainActivity extends RoboActivity {
   @Inject
   UrlProvider urlProvider;
 
+  @Inject
+  EventBus bus;
+
+  @Inject
+  JobsDataSource jobs;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.main);
 
-    final JobsAdapter adapter = new JobsAdapter();
+    final JobsAdapter adapter = new JobsAdapter(bus);
 
     new FetchJobsTask(urlProvider.getUrl(), new FetchJobsTask.Callback() {
       @Override
-      public void call(List<Job> jobs) {
-        adapter.setJobs(jobs);
+      public void call(JobsList jobs) {
+        MainActivity.this.jobs.setJobs(jobs);
       }
     }).execute();
 
@@ -46,7 +55,7 @@ public class MainActivity extends RoboActivity {
     jobsList.setAdapter(adapter);
   }
 
-  private static class FetchJobsTask extends AsyncTask<Void, Void, List<Job>> {
+  private static class FetchJobsTask extends AsyncTask<Void, Void, JobsList> {
     private final String url;
     private final Callback callback;
 
@@ -56,7 +65,7 @@ public class MainActivity extends RoboActivity {
     }
 
     @Override
-    protected List<Job> doInBackground(Void... params) {
+    protected JobsList doInBackground(Void... params) {
       OkHttpClient httpClient = new OkHttpClient();
       Request request = new Request.Builder()
               .url(url + "/api/v1/jobs")
@@ -66,7 +75,7 @@ public class MainActivity extends RoboActivity {
         Response response = httpClient.newCall(request).execute();
         JSONArray jobsJson = new JSONArray(response.body().string());
 
-        ArrayList<Job> jobs = new ArrayList<Job>();
+        JobsList jobs = new JobsList();
 
         for (int i = 0; i < jobsJson.length(); i++) {
           JSONObject jobJson = jobsJson.getJSONObject(i);
@@ -88,23 +97,26 @@ public class MainActivity extends RoboActivity {
     }
 
     @Override
-    protected void onPostExecute(List<Job> jobs) {
+    protected void onPostExecute(JobsList jobs) {
       callback.call(jobs);
     }
 
     public interface Callback {
-      public void call(List<Job> jobs);
+      public void call(JobsList jobs);
     }
   }
 
   private class JobsAdapter extends BaseAdapter {
     private List<Job> jobs;
 
-    public JobsAdapter() {
+    public JobsAdapter(EventBus bus) {
+      bus.register(this);
+
       this.jobs = new ArrayList<Job>();
     }
 
-    public void setJobs(List<Job> jobs) {
+    @Subscribe
+    public void setJobs(JobsList jobs) {
       this.jobs = jobs;
       notifyDataSetChanged();
     }
