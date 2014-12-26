@@ -1,6 +1,5 @@
 package com.seadowg.windsock;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import com.google.inject.Inject;
+import com.seadowg.windsock.instance.UrlProvider;
 import com.seadowg.windsock.jobs.Job;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -15,12 +16,16 @@ import com.squareup.okhttp.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import roboguice.activity.RoboActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends Activity {
+public class MainActivity extends RoboActivity {
+
+  @Inject
+  UrlProvider urlProvider;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +34,7 @@ public class MainActivity extends Activity {
 
     final JobsAdapter adapter = new JobsAdapter();
 
-    new FetchJobsTask(new FetchJobsTask.Callback() {
+    new FetchJobsTask(urlProvider.getUrl(), new FetchJobsTask.Callback() {
       @Override
       public void call(List<Job> jobs) {
         adapter.setJobs(jobs);
@@ -42,9 +47,11 @@ public class MainActivity extends Activity {
   }
 
   private static class FetchJobsTask extends AsyncTask<Void, Void, List<Job>> {
+    private final String url;
     private final Callback callback;
 
-    public FetchJobsTask(Callback callback) {
+    public FetchJobsTask(String hostUrl, Callback callback) {
+      this.url = hostUrl;
       this.callback = callback;
     }
 
@@ -52,7 +59,7 @@ public class MainActivity extends Activity {
     protected List<Job> doInBackground(Void... params) {
       OkHttpClient httpClient = new OkHttpClient();
       Request request = new Request.Builder()
-              .url("http://ci.concourse.ci/api/v1/jobs")
+              .url(url + "/api/v1/jobs")
               .build();
 
       try {
