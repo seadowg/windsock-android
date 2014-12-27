@@ -5,8 +5,8 @@ buildscript {
 
     dependencies {
         classpath 'com.android.tools.build:gradle:0.14.2'
-        classpath 'org.robolectric:robolectric-gradle-plugin:0.13.+'
-        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.+'
+        classpath 'org.robolectric:robolectric-gradle-plugin:0.13.2'
+        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
     }
 }
 
@@ -27,12 +27,13 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE'
     }
+
     compileSdkVersion 19
     buildToolsVersion "19.1.0"
 
     defaultConfig {
         minSdkVersion 18
-        targetSdkVersion 18
+        targetSdkVersion 19
         versionCode 2
         versionName "1.0.0-SNAPSHOT"
         testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
@@ -54,8 +55,8 @@ dependencies {
     repositories {
         mavenCentral()
     }
-    compile 'org.roboguice:roboguice:3.+'
-    provided 'org.roboguice:roboblender:3.+'
+    compile 'org.roboguice:roboguice:3.0.1'
+    provided 'org.roboguice:roboblender:3.0.1'
 
     compile 'com.squareup:otto:1.3.4'
     compile 'com.squareup.okhttp:okhttp:2.1.0'

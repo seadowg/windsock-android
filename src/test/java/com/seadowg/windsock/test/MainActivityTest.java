@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 import org.robolectric.tester.android.view.TestMenuItem;
 import roboguice.RoboGuice;
 import roboguice.inject.RoboInjector;
@@ -25,6 +26,7 @@ import java.io.IOException;
 import static org.junit.Assert.assertEquals;
 import static org.robolectric.Robolectric.shadowOf;
 
+@Config(manifest = "./src/main/AndroidManifest.xml", emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)
 public class MainActivityTest {
 
