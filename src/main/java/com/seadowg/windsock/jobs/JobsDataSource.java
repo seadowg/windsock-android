@@ -2,7 +2,6 @@ package com.seadowg.windsock.jobs;
 
 import android.os.AsyncTask;
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -14,7 +13,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-@Singleton
 public class JobsDataSource {
 
   private final Bus bus;
