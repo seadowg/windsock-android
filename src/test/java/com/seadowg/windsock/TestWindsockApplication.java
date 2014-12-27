@@ -2,7 +2,7 @@ package com.seadowg.windsock;
 
 import android.app.Application;
 import com.google.inject.AbstractModule;
-import com.seadowg.windsock.instance.UrlProvider;
+import com.seadowg.windsock.instance.UrlDataSource;
 import org.robolectric.Robolectric;
 import roboguice.RoboGuice;
 
@@ -18,7 +18,7 @@ public class TestWindsockApplication extends Application {
 
     @Override
     protected void configure() {
-      bind(UrlProvider.class).toInstance(new UrlProvider());
+      bind(UrlDataSource.class).toInstance(new UrlDataSource());
     }
   }
 }

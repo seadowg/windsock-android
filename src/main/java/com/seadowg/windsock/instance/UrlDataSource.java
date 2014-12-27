@@ -3,7 +3,7 @@ package com.seadowg.windsock.instance;
 import com.google.inject.Singleton;
 
 @Singleton
-public class UrlProvider {
+public class UrlDataSource {
   private String url;
 
   public void setUrl(String url) {

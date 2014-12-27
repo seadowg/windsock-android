@@ -5,7 +5,7 @@ import android.widget.ListView;
 import com.google.inject.Inject;
 import com.seadowg.windsock.MainActivity;
 import com.seadowg.windsock.R;
-import com.seadowg.windsock.instance.UrlProvider;
+import com.seadowg.windsock.instance.UrlDataSource;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
@@ -27,7 +27,7 @@ import static org.robolectric.Robolectric.shadowOf;
 public class MainActivityTest {
 
     @Inject
-    private UrlProvider urlProvider;
+    private UrlDataSource urlDataSource;
 
     private Activity activity;
     private MockWebServer server;
@@ -77,7 +77,7 @@ public class MainActivityTest {
     }
 
     private void startActivity() {
-        urlProvider.setUrl(server.getUrl("").toString());
+        urlDataSource.setUrl(server.getUrl("").toString());
         activity = Robolectric.setupActivity(MainActivity.class);
     }
 }
