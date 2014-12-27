@@ -3,8 +3,6 @@ package com.seadowg.windsock.jobs;
 import android.os.AsyncTask;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.seadowg.windsock.Events;
-import com.seadowg.windsock.MainActivity;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -19,12 +17,15 @@ import java.io.IOException;
 @Singleton
 public class JobsDataSource {
 
-  private final Events bus;
+  private final Bus bus;
+  private final String url;
   private JobsList jobs;
 
   @Inject
-  public JobsDataSource() {
-    this.bus = new Events();
+  public JobsDataSource(String url) {
+    this.url = url;
+
+    this.bus = new Bus();
     this.jobs = new JobsList();
 
     bus.register(this);
@@ -39,7 +40,7 @@ public class JobsDataSource {
     bus.register(object);
   }
 
-  public void update(String url) {
+  public void update() {
     new FetchJobsTask(url).execute();
   }
 

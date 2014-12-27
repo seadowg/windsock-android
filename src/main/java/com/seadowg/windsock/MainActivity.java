@@ -2,14 +2,12 @@ package com.seadowg.windsock;
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.google.inject.Inject;
-import com.seadowg.windsock.instance.UrlDataSource;
+import com.seadowg.windsock.instance.UrlProvider;
 import com.seadowg.windsock.jobs.Job;
 import com.seadowg.windsock.jobs.JobsDataSource;
 import com.seadowg.windsock.jobs.JobsList;
@@ -20,9 +18,8 @@ import java.util.List;
 public class MainActivity extends RoboActivity {
 
   @Inject
-  UrlDataSource urlDataSource;
+  UrlProvider urlProvider;
 
-  @Inject
   JobsDataSource jobs;
 
   @Override
@@ -30,13 +27,32 @@ public class MainActivity extends RoboActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.main);
 
-    jobs.update(urlDataSource.getUrl());
+    jobs = new JobsDataSource(urlProvider.getUrl());
+    jobs.update();
 
     ListView jobsList = (ListView) findViewById(R.id.jobs);
     jobsList.setEmptyView(findViewById(R.id.no_jobs));
 
     final JobsAdapter adapter = new JobsAdapter(jobs);
     jobsList.setAdapter(adapter);
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    MenuInflater inflater = getMenuInflater();
+    inflater.inflate(R.menu.main_activity_actions, menu);
+    return super.onCreateOptionsMenu(menu);
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.refresh:
+        jobs.update();
+        return true;
+      default:
+        return super.onOptionsItemSelected(item);
+    }
   }
 
   private static class JobsAdapter extends BaseAdapter {

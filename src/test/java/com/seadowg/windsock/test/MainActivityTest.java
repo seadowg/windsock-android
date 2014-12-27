@@ -1,11 +1,12 @@
 package com.seadowg.windsock.test;
 
 import android.app.Activity;
+import android.view.MenuItem;
 import android.widget.ListView;
 import com.google.inject.Inject;
 import com.seadowg.windsock.MainActivity;
 import com.seadowg.windsock.R;
-import com.seadowg.windsock.instance.UrlDataSource;
+import com.seadowg.windsock.instance.UrlProvider;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
@@ -15,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.tester.android.view.TestMenuItem;
 import roboguice.RoboGuice;
 import roboguice.inject.RoboInjector;
 
@@ -27,7 +29,7 @@ import static org.robolectric.Robolectric.shadowOf;
 public class MainActivityTest {
 
     @Inject
-    private UrlDataSource urlDataSource;
+    private UrlProvider urlProvider;
 
     private Activity activity;
     private MockWebServer server;
@@ -62,6 +64,19 @@ public class MainActivityTest {
         assertEquals(true, innerTextOf(activity).contains("atc"));
     }
 
+    @Test
+    public void clickingOnRefreshButton_refreshesListOfJobs() throws Exception {
+        setupServer();
+        startActivity();
+
+        MenuItem item = new TestMenuItem(R.id.refresh);
+        activity.onOptionsItemSelected(item);
+
+        shadowOf((ListView) activity.findViewById(R.id.jobs)).populateItems(); // Make sure list view has rendered
+        assertEquals(true, innerTextOf(activity).contains("different_fly"));
+        assertEquals(true, innerTextOf(activity).contains("different_atc"));
+    }
+
     private String innerTextOf(Activity activity) {
         return shadowOf(activity.findViewById(R.id.layout)).innerText();
     }
@@ -73,11 +88,15 @@ public class MainActivityTest {
             "{ \"name\": \"atc\", \"finished_build\": { \"status\": \"succeeded\" }}]";
         server.enqueue(new MockResponse().setBody(body));
 
+        body = "[{ \"name\": \"different_fly\", \"finished_build\": { \"status\": \"succeeded\" }}, " +
+            "{ \"name\": \"different_atc\", \"finished_build\": { \"status\": \"succeeded\" }}]";
+        server.enqueue(new MockResponse().setBody(body));
+
         server.play();
     }
 
     private void startActivity() {
-        urlDataSource.setUrl(server.getUrl("").toString());
+        urlProvider.setUrl(server.getUrl("").toString());
         activity = Robolectric.setupActivity(MainActivity.class);
     }
 }
