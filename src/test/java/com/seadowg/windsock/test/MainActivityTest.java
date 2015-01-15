@@ -7,7 +7,6 @@ import com.google.inject.Inject;
 import com.seadowg.windsock.MainActivity;
 import com.seadowg.windsock.R;
 import com.seadowg.windsock.instance.UrlProvider;
-import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
 import org.junit.After;
@@ -21,8 +20,7 @@ import org.robolectric.tester.android.view.TestMenuItem;
 import roboguice.RoboGuice;
 import roboguice.inject.RoboInjector;
 
-import java.io.IOException;
-
+import static com.seadowg.windsock.test.support.ApiResponses.*;
 import static com.seadowg.windsock.test.support.Helpers.innerTextOf;
 import static org.junit.Assert.assertEquals;
 import static org.robolectric.Robolectric.shadowOf;
@@ -50,8 +48,11 @@ public class MainActivityTest {
 
     @Test
     public void fetchesJobsFromCorrectUrl() throws Exception {
-        setupServer();
-        startActivity();
+        server = new MockWebServer();
+        server.enqueue(jobsResponse);
+        server.play();
+
+        startActivity(server);
 
         RecordedRequest recordedRequest = server.takeRequest();
         assertEquals("/api/v1/jobs", recordedRequest.getPath());
@@ -59,8 +60,11 @@ public class MainActivityTest {
 
     @Test
     public void showsJobs() throws Exception {
-        setupServer();
-        startActivity();
+        server = new MockWebServer();
+        server.enqueue(jobsResponse);
+        server.play();
+
+        startActivity(server);
 
         shadowOf((ListView) activity.findViewById(R.id.jobs)).populateItems(); // Make sure list view has rendered
         assertEquals(true, innerTextOf(activity).contains("fly"));
@@ -69,8 +73,12 @@ public class MainActivityTest {
 
     @Test
     public void clickingOnRefreshButton_refreshesListOfJobs() throws Exception {
-        setupServer();
-        startActivity();
+        server = new MockWebServer();
+        server.enqueue(jobsResponse);
+        server.enqueue(differentJobsResponse);
+        server.play();
+
+        startActivity(server);
 
         MenuItem item = new TestMenuItem(R.id.refresh);
         activity.onOptionsItemSelected(item);
@@ -80,22 +88,8 @@ public class MainActivityTest {
         assertEquals(true, innerTextOf(activity).contains("different_atc"));
     }
 
-    private void setupServer() throws IOException {
-        server = new MockWebServer();
-
-        String body = "[{ \"name\": \"fly\", \"finished_build\": { \"status\": \"succeeded\" }}, " +
-            "{ \"name\": \"atc\", \"finished_build\": { \"status\": \"succeeded\" }}]";
-        server.enqueue(new MockResponse().setBody(body));
-
-        body = "[{ \"name\": \"different_fly\", \"finished_build\": { \"status\": \"succeeded\" }}, " +
-            "{ \"name\": \"different_atc\", \"finished_build\": { \"status\": \"succeeded\" }}]";
-        server.enqueue(new MockResponse().setBody(body));
-
-        server.play();
-    }
-
-    private void startActivity() {
-        urlProvider.setUrl(server.getUrl("").toString());
+    private void startActivity(MockWebServer server) {
+        urlProvider.setUrl(this.server.getUrl("").toString());
         activity = Robolectric.setupActivity(MainActivity.class);
     }
 }
