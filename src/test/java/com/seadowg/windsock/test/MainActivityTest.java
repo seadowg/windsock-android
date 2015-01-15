@@ -23,6 +23,7 @@ import roboguice.inject.RoboInjector;
 
 import java.io.IOException;
 
+import static com.seadowg.windsock.test.support.Helpers.innerTextOf;
 import static org.junit.Assert.assertEquals;
 import static org.robolectric.Robolectric.shadowOf;
 
@@ -77,10 +78,6 @@ public class MainActivityTest {
         shadowOf((ListView) activity.findViewById(R.id.jobs)).populateItems(); // Make sure list view has rendered
         assertEquals(true, innerTextOf(activity).contains("different_fly"));
         assertEquals(true, innerTextOf(activity).contains("different_atc"));
-    }
-
-    private String innerTextOf(Activity activity) {
-        return shadowOf(activity.findViewById(R.id.layout)).innerText();
     }
 
     private void setupServer() throws IOException {
