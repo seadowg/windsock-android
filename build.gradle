@@ -46,7 +46,7 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.1.0'
     compile 'com.squareup.okhttp:mockwebserver:2.1.0'
 
-    compile 'com.android.support:support-v4:20.0.0'
+    compile 'com.android.support:support-v4:21.0.3'
     testCompile 'junit:junit:4.12'
     testCompile('org.robolectric:robolectric:2.4') {
         exclude module: 'classworlds'
