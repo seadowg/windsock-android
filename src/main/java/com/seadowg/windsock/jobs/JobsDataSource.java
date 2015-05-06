@@ -58,7 +58,7 @@ public class JobsDataSource {
     protected JobsList doInBackground(Void... params) {
       OkHttpClient httpClient = new OkHttpClient();
       Request request = new Request.Builder()
-          .url(url + "/api/v1/jobs")
+          .url(url + "/api/v1/pipelines/main/jobs")
           .build();
 
       try {

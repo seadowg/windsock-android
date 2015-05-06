@@ -55,7 +55,7 @@ public class MainActivityTest {
         startActivity(server);
 
         RecordedRequest recordedRequest = server.takeRequest();
-        assertEquals("/api/v1/jobs", recordedRequest.getPath());
+        assertEquals("/api/v1/pipelines/main/jobs", recordedRequest.getPath());
     }
 
     @Test
