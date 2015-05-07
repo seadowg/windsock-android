@@ -8,8 +8,8 @@ resources:
 jobs:
   - name: test
     plan:
-      - get: src
-        resource: windsock-android
+      - get: windsock-android
+        resource: src
       - task: test
         file: windsock-android/concourse/test.yml
 

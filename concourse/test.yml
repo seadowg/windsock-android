@@ -1,6 +1,6 @@
 platform: linux
 
-image: docker:///seadowg/android
+image: docker:///seadowg/android#android-19
 
 inputs:
   - name: windsock-android
