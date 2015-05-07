@@ -1,0 +1,9 @@
+platform: linux
+
+image: docker:///seadowg/android
+
+inputs:
+  - name: windsock-android
+
+run:
+  path: windsock-android/concourse/test

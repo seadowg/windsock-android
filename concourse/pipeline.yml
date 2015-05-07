@@ -1,0 +1,15 @@
+resources:
+  - name: src
+    type: git
+    source:
+      uri: https://github.com/seadowg/windsock-android.git
+      branch: master
+
+jobs:
+  - name: test
+    plan:
+      - get: src
+        resource: windsock-android
+      - task: test
+        file: windsock-android/concourse/test.yml
+
