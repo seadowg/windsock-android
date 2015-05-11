@@ -14,7 +14,7 @@ public class UrlProvider {
     if (url != null) {
       return url;
     } else {
-      return "http://ci.concourse.ci";
+      return "https://ci.concourse.ci";
     }
   }
 }

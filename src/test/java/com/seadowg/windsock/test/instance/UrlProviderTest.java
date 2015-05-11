@@ -10,6 +10,6 @@ public class UrlProviderTest {
   @Test
   public void defaultsToConcourseCIInstance() {
     UrlProvider urlProvider = new UrlProvider();
-    assertEquals("http://ci.concourse.ci", urlProvider.getUrl());
+    assertEquals("https://ci.concourse.ci", urlProvider.getUrl());
   }
 }
